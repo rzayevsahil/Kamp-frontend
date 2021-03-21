@@ -11,8 +11,8 @@ export class CategoryComponent implements OnInit {
 
   categories:Category[]=[];
   //tsconfig.json ksımına Initialization ekledik diye buna gerek kalmadı
-  // currentCategory:Category={categoryId=0,categoryName=""};   ={categoryId:0,categoryName:""}
-  currentCategory:Category;
+  // currentCategory:Category={categoryId=0,categoryName=""};   aşağıdakı satırla aynı anlamda
+  currentCategory:Category; //new'liyiruz burada;null bir değer gibi düşünelim
   default:Category;
 
   constructor(private categoryService:CategoryService) { }
