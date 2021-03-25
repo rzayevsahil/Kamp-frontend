@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { Product } from 'src/app/models/product';
+import { CartService } from 'src/app/services/cart.service';
 import { ProductService } from 'src/app/services/product.service';
 
 @Component({
@@ -16,23 +18,28 @@ export class ProductComponent implements OnInit {
   // product5 = { productId: 5, productName: 'Camera', categoryId: 1, unitPrice: 5, unitsInStock: 5 };
 
   products: Product[] = [];
-  dataLoaded=false;
+  dataLoaded = false;
+  filterText = '';
   //  productResponseModel:ProductResponseModel={
   //    data:this.products,
   //    message:"",
   //    success:true
   //  };
-  constructor(private productService:ProductService, private activatedRoute:ActivatedRoute ) {}  //servisi kullanmak için bunu yapıyoruz
+  constructor(
+    private productService: ProductService,
+    private activatedRoute: ActivatedRoute,
+    private toastrService: ToastrService,
+    private cartService:CartService
+  ) {} //servisi kullanmak için bunu yapıyoruz
 
   ngOnInit(): void {
-    
-    this.activatedRoute.params.subscribe(params=>{
-      if(params["categoryId"]){
-        this.getProductsByCategory(params["categoryId"])
-      }else{
-        this.getProducts()
+    this.activatedRoute.params.subscribe((params) => {
+      if (params['categoryId']) {
+        this.getProductsByCategory(params['categoryId']);
+      } else {
+        this.getProducts();
       }
-    })
+    });
   }
 
   getProducts() {
@@ -41,16 +48,31 @@ export class ProductComponent implements OnInit {
     //   .subscribe((response) => {
     //     this.products=response.data
     //   });
-    this.productService.getProducts().subscribe(response=>{
-      this.products=response.data;
-      this.dataLoaded=true;
-    })
+    this.productService.getProducts().subscribe((response) => {
+      this.products = response.data;
+      this.dataLoaded = true;
+    });
   }
 
-  getProductsByCategory(categoryId:number) {
-    this.productService.getProductByCategory(categoryId).subscribe(response=>{
-      this.products=response.data;
-      this.dataLoaded=true;
-    })
+  getProductsByCategory(categoryId: number) {
+    this.productService
+      .getProductByCategory(categoryId)
+      .subscribe((response) => {
+        this.products = response.data;
+        this.dataLoaded = true;
+      });
+  }
+
+  addToCart(product: Product) {
+    //console.log(product);
+    //logicikleri buraya yazarız
+    //==bu js de string 1 ile int 1 i aynı kabul eder o yüzden === yaptığımızada veri tipine de bakar
+    if (product.productId===1) {
+      this.toastrService.error("Hata","Ürün sepete eklenemez")
+    } else {
+      this.toastrService.success('Sepete eklendi',product.productName)
+      this.cartService.addToCart(product); 
+    }
+    
   }
 }
