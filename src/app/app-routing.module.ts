@@ -1,12 +1,16 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { ProductAddComponent } from './components/product-add/product-add.component';
 import { ProductComponent } from './components/product/product.component';
 
 const routes: Routes = [
   //path:""--http://localhost:4200/    path:"products"--http://localhost:4200/products
   {path:"",pathMatch:"full",component:ProductComponent},
   {path:"products",component:ProductComponent},
-  {path:"products/category/:categoryId",component:ProductComponent}];
+  {path:"products/category/:categoryId",component:ProductComponent},
+  {path:"products/add",component:ProductAddComponent}
+];
+  
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
